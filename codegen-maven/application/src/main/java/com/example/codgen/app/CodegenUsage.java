@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.persistence.metamodel.PluralAttribute;
+import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import java.util.Arrays;
 import java.util.Set;
@@ -35,7 +37,13 @@ public class CodegenUsage implements CommandLineRunner {
         LOG.info("{} -> {}", clazz.getAnnotation(StaticMetamodel.class).value(),
                 nonStringFields.stream().map(f -> {
                     try {
-                        return new FieldInfo(f.getName(), f.get(null));
+                        Object value = f.get(null);
+                        if (value instanceof SingularAttribute sa) {
+                            LOG.info("singularAttribute {}: {}", sa.getName(), sa.getType().getJavaType());
+                        } else if (value instanceof PluralAttribute pa) {
+                            LOG.info("pluralrAttribute {}: {}", pa.getName(), pa.getElementType());
+                        }
+                        return new FieldInfo(f.getName(), value);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
