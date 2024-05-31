@@ -70,6 +70,11 @@
             <version>1.18.32</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>processor</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -94,6 +99,11 @@
                             <groupId>com.mammb</groupId>
                             <artifactId>jpa-fluent-modelgen</artifactId>
                             <version>0.10.0</version>
+                        </path>
+                        <path>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>processor</artifactId>
+                            <version>${project.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
