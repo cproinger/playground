@@ -9,11 +9,8 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVisitor;
 import javax.lang.model.util.ElementFilter;
-import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SingularAttribute;
-import javax.persistence.metamodel.StaticMetamodel;
 import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -72,7 +69,7 @@ public class EntityMetaUtilitiesGeneratorProcessor extends javax.annotation.proc
                             imports.add("javax.annotation.processing.Generated");
                             imports.add("java.util.function.Function");
                             imports.add("java.util.List");
-                            imports.add(MMGetter.class.getName());
+                            imports.add(MMAccessor.class.getName());
 
                             imports.generate(pw);
                             pw.println();
@@ -87,7 +84,7 @@ public class EntityMetaUtilitiesGeneratorProcessor extends javax.annotation.proc
 
                             pw.println();
                             pw.println("""
-                                    %1$spublic static final List<MMGetter<%2$s,?>> ALL_SINGULAR = List.of(
+                                    %1$spublic static final List<MMAccessor<%2$s,?>> ALL_SINGULAR = List.of(
                                     %1$s    %3$s
                                     %1$s); 
                                     """.formatted(
@@ -140,8 +137,8 @@ public class EntityMetaUtilitiesGeneratorProcessor extends javax.annotation.proc
             String mmGetterConstant = "GET_" + attr.getSimpleName().toString();
             generatedConstants.add(mmGetterConstant);
             pw.println(("""
-                        public static final MMGetter<%1$s, %2$s> %4$s
-                            = new MMGetter<>(\"%3$s\", %1$s.class, %2$s.class , %1$s::get%6$s);
+                        public static final MMAccessor<%1$s, %2$s> %4$s
+                            = new MMAccessor<>(\"%3$s\", %1$s.class, %2$s.class , %1$s::get%6$s);
                     """).formatted(declaredType.getTypeArguments().get(0),
                     declaredType.getTypeArguments().get(1),
                     attr.getSimpleName().toString(),
