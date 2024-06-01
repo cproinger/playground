@@ -95,17 +95,19 @@ public class EntityMetaUtilitiesGeneratorProcessor extends javax.annotation.proc
                                         .printMessage(Diagnostic.Kind.NOTE,
                                                 getClass().getSimpleName() + " processing " + tated + ": " + declaredType);
 
+                                // TODO find a better way to do this
                                 if (!declaredType.toString().substring(0, declaredType.toString().indexOf('<')).equals(SingularAttribute.class.getName())) {
                                     continue;
                                 }
 
                                 pw.println(("""
-                                            public static final MMGetter<%1$s, %2$s> GET_%3$s
-                                                = new MMGetter<>(\"%3$s\", %1$s.class, %2$s.class , %1$s::get%5$s);
+                                            public static final MMGetter<%1$s, %2$s> %4$s
+                                                = new MMGetter<>(\"%3$s\", %1$s.class, %2$s.class , %1$s::get%6$s);
                                         """).formatted(
                                         declaredType.getTypeArguments().get(0),
                                         declaredType.getTypeArguments().get(1),
                                         attr.getSimpleName().toString(),
+                                        "GET_" + attr.getSimpleName().toString(),
 //                                        attr.getSimpleName().toString()
                                         declaredType.getTypeArguments().get(1),
                                         Character.toUpperCase(attr.getSimpleName().toString().charAt(0)) + attr.getSimpleName().toString().substring(1)
